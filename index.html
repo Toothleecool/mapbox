@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>恭喜，站点创建成功！</title>
+
+          <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+          <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+        
+          <script src="http://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+          <script src="http://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  
+  
+</head>
+<body>
+    
+    
+        <div class="container">
+                <div id="ins" style="width:600px;height: 600px;">
+                        <div id="map" style="width:600px;height: 600px;">
+                        </div>
+                </div>
+        </div>
+
+    
+    
+      <script type="text/javascript">
+      
+    mapboxgl.accessToken = 'pk.eyJ1IjoidGl0aW1hcCIsImEiOiJjbDdoYnl3eXQwZDB5M3VzYXhicGhxemNxIn0.mWHyJMQ1z-ur-ML_v6Setg';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/titimap/ckus3jqzjnxeq18npt31h5yqo',
+      center: [121.46525278446722, 31.226459058151136], // starting position
+      zoom: 11, // starting zoom
+      preserveDrawingBuffer: true,
+    });
+
+  	function jietu() {
+  		html2canvas(document.querySelector("#ins"),{
+  		     useCORS: true
+  		}).then(canvas => {
+  		    
+  		    //除了IOS，确切的说，目前只测试了iPhone真机。其他的任意平台，包括安卓以及WIN11都是正常的可以使用的。只有IOS有BUG。
+  		    
+  			var imgData = canvas.toDataURL();   
+  			//这是我需要的截图的canvas，ID为ins，如果不包含MAPBOX地图的情况下，IOS正常可以截图使用下载、上传至后台。如果这个DIV包含MAPBOX地图的话。就无法截图了，IOS就会卡住，无法上传到后台，也无法下载。
+      		var imgData = map.getCanvas().toDataURL();  
+      		//这是MAPBOX自己生成的canvas。IOS下获取到这个imgData后就是正常的，可以下载以及上传到后台。但是我需要的是#ins里包含了MAPBOX的canvas，因为后续还需要添加很多其他的东西一起截图。可以直接下载或者上传到后台。
+  	    	//	con.appendChild(canvas)     可以忽略。
+  			downloadFile('标题' + '.png', imgData);
+  			console.log(canvas.toDataURL());     
+  			console.log(map.getCanvas().toDataURL());      //console.log后，发现两个代码是一样的。但是IOS下。就是无法使用包含了MAPBOX地图的 var imgData = canvas.toDataURL();。
+  			
+  			//除了IOS，确切的说，目前只测试了iPhone真机。其他的任意平台，包括安卓以及WIN11都是正常的可以使用的。只有IOS有BUG。研究好几天，可能比较菜，但是又感觉挺灵异的。
+  			//明明console.log出来的代码都一样。为什么就是不行呢？
+  			
+  		});
+
+  	}
+
+  	var downloadFile = function(fileName, content) {
+  		let aLink = document.createElement('a');
+  		let blob = base64ToBlob(content); 
+  		let evt = document.createEvent("HTMLEvents");
+  		evt.initEvent("click", true, true); //initEvent 
+  		aLink.download = fileName;
+  		aLink.href = URL.createObjectURL(blob);
+  		//aLink.dispatchEvent(evt);
+  		aLink.click()
+  	}
+
+  	var base64ToBlob = function(code) {
+  		let parts = code.split(';base64,');
+  		let contentType = parts[0].split(':')[1];
+  		let raw = window.atob(parts[1]);
+  		let rawLength = raw.length;
+
+  		let uInt8Array = new Uint8Array(rawLength);
+
+  		for (let i = 0; i < rawLength; ++i) {
+  			uInt8Array[i] = raw.charCodeAt(i);
+  		}
+  		return new Blob([uInt8Array], {
+  			type: contentType
+  		});
+  	}
+
+
+
+
+
+
+
+  </script>
+
+
+
+
+ <button onclick="jietu()" style="width:200px;height:400px">点击截图下载</button>
+
+</body>
+</html>
