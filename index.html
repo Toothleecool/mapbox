@@ -43,9 +43,13 @@
   		    //除了IOS，确切的说，目前只测试了iPhone真机。其他的任意平台，包括安卓以及WIN11都是正常的可以使用的。只有IOS有BUG。
   		    
   			var imgData = canvas.toDataURL();   
-  			//这是我需要的截图的canvas，ID为ins，如果不包含MAPBOX地图的情况下，IOS正常可以截图使用下载、上传至后台。如果这个DIV包含MAPBOX地图的话。就无法截图了，IOS就会卡住，无法上传到后台，也无法下载。
-      		var imgData = map.getCanvas().toDataURL();  
-      		//这是MAPBOX自己生成的canvas。IOS下获取到这个imgData后就是正常的，可以下载以及上传到后台。但是我需要的是#ins里包含了MAPBOX的canvas，因为后续还需要添加很多其他的东西一起截图。可以直接下载或者上传到后台。
+  			//这是我需要的截图的canvas，ID为ins，如果不包含MAPBOX地图的情况下，IOS正常可以截图使用下载、上传至后台。如果这个DIV包含MAPBOX地图的话。就无法截图了，
+            //IOS就会卡住，无法上传到后台，也无法下载。
+            
+      		//var imgData = map.getCanvas().toDataURL();  
+      		//这是MAPBOX自己生成的canvas。IOS下获取到这个imgData后就是正常的，可以下载以及上传到后台。但是我需要的是#ins里包含了MAPBOX的canvas，因为
+            //后续还需要添加很多其他的东西一起截图。可以直接下载或者上传到后台。
+            
   	    	//	con.appendChild(canvas)     可以忽略。
   			downloadFile('标题' + '.png', imgData);
   			console.log(canvas.toDataURL());     
